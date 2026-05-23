@@ -21,12 +21,12 @@ public class AdminUserServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("adminUser");
+User adminUser = (User) session.getAttribute("currentUser"); 
 
-        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-            response.sendRedirect("../login");
-            return;
-        }
+if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+    response.sendRedirect(request.getContextPath() + "/login"); 
+    return;
+}
 
         List<User> allUsers = userDAO.getAllUsers();
         request.setAttribute("users", allUsers);

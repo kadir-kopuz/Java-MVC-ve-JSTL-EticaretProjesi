@@ -22,12 +22,12 @@ public class AdminProductServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("adminUser");
+User adminUser = (User) session.getAttribute("currentUser"); // adminUser yerine currentUser yapıldı
 
-        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-            response.sendRedirect("../login");
-            return;
-        }
+if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+    response.sendRedirect(request.getContextPath() + "/login"); // yönlendirme yolu güvenli hale getirildi
+    return;
+}
 
         String action = request.getParameter("action");
         String idParam = request.getParameter("id");

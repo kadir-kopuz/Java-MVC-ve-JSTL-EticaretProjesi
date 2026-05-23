@@ -21,10 +21,12 @@ public class AdminCategoryFormServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("adminUser");
+        // Oturum kontrolünü projenin geneliyle uyumlu hale getirdik (currentUser)
+        User adminUser = (User) session.getAttribute("currentUser");
 
         if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-            response.sendRedirect("../login");
+            // Yönlendirme yolunu ana dizine göre güvenli hale getirdik
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -36,5 +38,41 @@ public class AdminCategoryFormServlet extends HttpServlet {
         }
 
         request.getRequestDispatcher("category-form.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // Türkçe kategorilerin veritabanına bozulmadan gitmesi için şarttır
+        request.setCharacterEncoding("UTF-8");
+        
+        HttpSession session = request.getSession();
+        User adminUser = (User) session.getAttribute("currentUser");
+
+        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // Formdan gelen Kategori verilerini yakalıyoruz
+        String idParam = request.getParameter("id");
+        String name = request.getParameter("name");
+
+        Category category = new Category();
+        category.setName(name);
+
+        boolean success;
+        if (idParam != null && !idParam.trim().isEmpty()) {
+            // ID parametresi varsa bu bir GÜNCELLEME işlemidir
+            category.setId(Integer.parseInt(idParam));
+            success = categoryDAO.updateCategory(category);
+        } else {
+            // ID parametresi yoksa bu YENİ KATEGORİ EKLEME işlemidir
+            success = categoryDAO.addCategory(category);
+        }
+
+        // İşlem tamamlandıktan sonra Kategori Listeleme ekranına yönlendiriyoruz
+        response.sendRedirect("categories");
     }
 }
