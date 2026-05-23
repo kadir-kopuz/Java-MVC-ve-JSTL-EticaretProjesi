@@ -27,7 +27,7 @@
         <div class="admin-main">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>Ürün Yönetimi</h2>
-                <a href="products?action=new" class="btn" style="width: auto; padding: 10px 20px;">Yeni Ürün Ekle</a>
+                <a href="product-form" class="btn" style="width: auto; padding: 10px 20px;">Yeni Ürün Ekle</a>
             </div>
             <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
@@ -47,7 +47,7 @@
                             <td style="padding: 12px;"><fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₺" /></td>
                             <td style="padding: 12px;">${p.stock} adet</td>
                             <td style="padding: 12px;">
-                                <a href="products?action=edit&id=${p.id}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; width: auto; display: inline-block;">Düzenle</a>
+                                <a href="product-form?id=${p.id}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; width: auto; display: inline-block;">Düzenle</a>
                                 <a href="products?action=delete&id=${p.id}" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px; width: auto; display: inline-block; background: #e74c3c;" onclick="return confirm('Bu ürünü silmek istediğinize emin misiniz?')">Sil</a>
                             </td>
                         </tr>

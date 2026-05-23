@@ -27,7 +27,7 @@
         <div class="admin-main">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>Kategori Yönetimi</h2>
-                <a href="categories?action=new" class="btn" style="width: auto; padding: 10px 20px;">Yeni Kategori Ekle</a>
+                <a href="category-form" class="btn" style="width: auto; padding: 10px 20px;">Yeni Kategori Ekle</a>
             </div>
             <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
@@ -43,7 +43,7 @@
                             <td style="padding: 12px;">${cat.id}</td>
                             <td style="padding: 12px;">${cat.name}</td>
                             <td style="padding: 12px;">
-                                <a href="categories?action=edit&id=${cat.id}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; width: auto; display: inline-block;">Düzenle</a>
+                                <a href="category-form?id=${cat.id}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; width: auto; display: inline-block;">Düzenle</a>
                                 <a href="categories?action=delete&id=${cat.id}" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px; width: auto; display: inline-block; background: #e74c3c;" onclick="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')">Sil</a>
                             </td>
                         </tr>

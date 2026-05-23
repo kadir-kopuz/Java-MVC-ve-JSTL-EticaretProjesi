@@ -91,3 +91,104 @@ body {
   margin-bottom: 15px;
   text-align: center;
 }
+/* --- ADMIN PANELI YAN YANA VE RENKLI GÖRÜNÜMÜ --- */
+
+/* Sidebar konteynerini dikeyden yataya (yan yana) çeviriyoruz */
+.admin-container {
+  display: flex;
+  flex-direction: column; /* Sayfa yerleşimini yukarıdan aşağıya sıralar */
+  margin: 20px;
+  gap: 20px;
+}
+
+/* Menü çubuğunu üst tarafa geniş bir bant halinde yan yana diziyoruz */
+.admin-sidebar {
+  width: 100% !important;
+  min-height: auto !important;
+  background: #2c3e50;
+  padding: 10px 15px !important;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap; /* Ekran küçülürse butonlar alt satıra şıkça kayar */
+  gap: 12px;
+  align-items: center;
+}
+
+/* Menü Linklerinin Ortak Şık Tasarımı (Alt çizgiler tamamen kalktı) */
+.admin-sidebar a {
+  text-decoration: none !important;
+  display: inline-block;
+  padding: 10px 20px !important;
+  margin: 0 !important;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff !important;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Her Butona Sayfa Konseptine Uygun Ayrı ve Canlı Renkler */
+
+/* 1. Panel Ana Sayfa (Mavi) */
+.admin-sidebar a[href="dashboard"] {
+  background-color: #3498db;
+}
+.admin-sidebar a[href="dashboard"]:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+/* 2. Kategori Yönetimi (Yeşil) */
+.admin-sidebar a[href="categories"],
+.admin-sidebar a[href="category-form"] {
+  background-color: #2ecc71;
+}
+.admin-sidebar a[href="categories"]:hover,
+.admin-sidebar a[href="category-form"]:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+
+/* 3. Ürün Yönetimi (Mor/Eflatun) */
+.admin-sidebar a[href="products"],
+.admin-sidebar a[href="product-form"] {
+  background-color: #9b59b6;
+}
+.admin-sidebar a[href="products"]:hover,
+.admin-sidebar a[href="product-form"]:hover {
+  background-color: #8e44ad;
+  transform: translateY(-2px);
+}
+
+/* 4. Sipariş Yönetimi (Turuncu/Altın) */
+.admin-sidebar a[href="orders"] {
+  background-color: #f1c40f;
+  color: #2c3e50 !important; /* Koyu renk yazı daha okunaklı olur */
+}
+.admin-sidebar a[href="orders"]:hover {
+  background-color: #f39c12;
+  transform: translateY(-2px);
+}
+
+/* 5. Kullanıcı Listesi (Turkuaz) */
+.admin-sidebar a[href="users"] {
+  background-color: #1abc9c;
+}
+.admin-sidebar a[href="users"]:hover {
+  background-color: #16a085;
+  transform: translateY(-2px);
+}
+
+/* Aktif olan butonun üzerinde hafif bir parlama efekti */
+.admin-sidebar a.active {
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* İçerik alanının genişliğini yan yana yerleşimden sonra tam genişlik yapıyoruz */
+.admin-main {
+  width: 100% !important;
+  box-sizing: border-box;
+}

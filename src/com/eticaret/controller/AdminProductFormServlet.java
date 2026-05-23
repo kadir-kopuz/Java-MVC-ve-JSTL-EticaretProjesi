@@ -25,14 +25,14 @@ public class AdminProductFormServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("adminUser");
+        User adminUser = (User) session.getAttribute("currentUser");
 
         if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-            response.sendRedirect("../login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        List<Category> categories = categoryDAO.getAllActiveCategories();
+        List<Category> categories = categoryDAO.getAllCategories();
         request.setAttribute("categories", categories);
 
         String idParam = request.getParameter("id");
@@ -46,7 +46,44 @@ public class AdminProductFormServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        request.setCharacterEncoding("UTF-8");
+        
+        HttpSession session = request.getSession();
+        User adminUser = (User) session.getAttribute("currentUser");
+
+        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // Formdan gelen verileri tek tek yakalıyoruz
+        String idParam = request.getParameter("id");
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        String priceParam = request.getParameter("price");
+        String stockParam = request.getParameter("stock");
+        String categoryIdParam = request.getParameter("categoryId");
+        String imageUrl = request.getParameter("imageUrl");
+
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(Double.parseDouble(priceParam));
+        product.setStock(Integer.parseInt(stockParam));
+        product.setCategoryId(Integer.parseInt(categoryIdParam));
+        product.setImageUrl(imageUrl);
+
+        boolean success;
+        if (idParam != null && !idParam.trim().isEmpty()) {
+            product.setId(Integer.parseInt(idParam));
+            success = productDAO.updateProduct(product);
+        } else {
+            success = productDAO.addProduct(product);
+        }
+
+        response.sendRedirect("products");
     }
 }
