@@ -10,9 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDAO {
+    private Boolean hasParentCategoryColumnCache;
+
     public List<Category> getAllActiveCategories() {
         List<Category> list = new ArrayList<>();
-        String query = "SELECT * FROM categories WHERE is_active = TRUE";
+        String query = hasParentCategoryColumn()
+                ? "SELECT * FROM categories WHERE is_active = TRUE ORDER BY COALESCE(parent_category_id, 0), name"
+                : "SELECT * FROM categories WHERE is_active = TRUE ORDER BY name";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query);
@@ -23,6 +27,10 @@ public class CategoryDAO {
                 cat.setId(rs.getInt("id"));
                 cat.setName(rs.getString("name"));
                 cat.setDescription(rs.getString("description"));
+                if (hasParentCategoryColumn()) {
+                    Object parentCategoryId = rs.getObject("parent_category_id");
+                    cat.setParentCategoryId(parentCategoryId != null ? ((Number) parentCategoryId).intValue() : null);
+                }
                 cat.setActive(rs.getBoolean("is_active"));
                 list.add(cat);
             }
@@ -33,7 +41,9 @@ public class CategoryDAO {
     }
     public List<Category> getAllCategories() {
         List<Category> list = new ArrayList<>();
-        String query = "SELECT * FROM categories ORDER BY id DESC";
+        String query = hasParentCategoryColumn()
+            ? "SELECT * FROM categories ORDER BY COALESCE(parent_category_id, 0), id DESC"
+            : "SELECT * FROM categories ORDER BY id DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
@@ -42,6 +52,10 @@ public class CategoryDAO {
                 cat.setId(rs.getInt("id"));
                 cat.setName(rs.getString("name"));
                 cat.setDescription(rs.getString("description"));
+                if (hasParentCategoryColumn()) {
+                    Object parentCategoryId = rs.getObject("parent_category_id");
+                    cat.setParentCategoryId(parentCategoryId != null ? ((Number) parentCategoryId).intValue() : null);
+                }
                 cat.setActive(rs.getBoolean("is_active"));
                 list.add(cat);
             }
@@ -52,12 +66,10 @@ public class CategoryDAO {
     }
 
     public boolean addCategory(Category category) {
-        String query = "INSERT INTO categories (name, description, is_active) VALUES (?, ?, ?)";
+        String query = "INSERT INTO categories (name) VALUES (?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, category.getName());
-            ps.setString(2, category.getDescription());
-            ps.setBoolean(3, category.isActive());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Kategori ekleme hatası: " + e.getMessage());
@@ -77,6 +89,10 @@ public class CategoryDAO {
                     cat.setId(rs.getInt("id"));
                     cat.setName(rs.getString("name"));
                     cat.setDescription(rs.getString("description"));
+                    if (hasParentCategoryColumn()) {
+                        Object parentCategoryId = rs.getObject("parent_category_id");
+                        cat.setParentCategoryId(parentCategoryId != null ? ((Number) parentCategoryId).intValue() : null);
+                    }
                     cat.setActive(rs.getBoolean("is_active"));
                 }
             }
@@ -87,18 +103,26 @@ public class CategoryDAO {
     }
 
     public boolean updateCategory(Category category) {
-        String query = "UPDATE categories SET name = ?, description = ?, is_active = ? WHERE id = ?";
+        String query = "UPDATE categories SET name = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, category.getName());
-            ps.setString(2, category.getDescription());
-            ps.setBoolean(3, category.isActive());
-            ps.setInt(4, category.getId());
+            ps.setInt(2, category.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Kategori güncelleme hatası: " + e.getMessage());
             return false;
         }
+    }
+
+    public List<Category> getActiveCategoryTree() {
+        // Üst kategori kaldırıldı; düz liste döndür
+        return getAllActiveCategories();
+    }
+
+    public List<Category> getCategoryTree() {
+        // Üst kategori kaldırıldı; düz liste döndür
+        return getAllCategories();
     }
 
     public boolean hasProducts(int categoryId) {
@@ -117,14 +141,39 @@ public class CategoryDAO {
         return false;
     }
 
+    public boolean hasChildCategories(int categoryId) {
+        if (!hasParentCategoryColumn()) {
+            return false;
+        }
+
+        String query = "SELECT COUNT(*) FROM categories WHERE parent_category_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, categoryId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Alt kategori kontrol hatası: " + e.getMessage());
+        }
+        return false;
+    }
+
     public String deleteOrDeactivateCategory(int categoryId) {
-        if (hasProducts(categoryId)) {
-            String query = "UPDATE categories SET is_active = FALSE WHERE id = ?";
+        if (hasProducts(categoryId) || hasChildCategories(categoryId)) {
+            String query = hasParentCategoryColumn()
+                    ? "UPDATE categories SET is_active = FALSE WHERE id = ? OR parent_category_id = ?"
+                    : "UPDATE categories SET is_active = FALSE WHERE id = ?";
             try (Connection conn = DBConnection.getConnection();
                  PreparedStatement ps = conn.prepareStatement(query)) {
                 ps.setInt(1, categoryId);
+                if (hasParentCategoryColumn()) {
+                    ps.setInt(2, categoryId);
+                }
                 ps.executeUpdate();
-                return "Bağlı ürünler olduğu için kategori silinemedi, durumu PASİF olarak güncellendi.";
+                return "Bağlı ürün veya alt kategori olduğu için kategori silinemedi, durumu PASİF olarak güncellendi.";
             } catch (SQLException e) {
                 return "İşlem sırasında hata oluştu.";
             }
@@ -138,6 +187,24 @@ public class CategoryDAO {
             } catch (SQLException e) {
                 return "Silme işlemi sırasında hata oluştu.";
             }
+        }
+    }
+
+    
+
+    private boolean hasParentCategoryColumn() {
+        if (hasParentCategoryColumnCache != null) {
+            return hasParentCategoryColumnCache;
+        }
+
+        try (Connection conn = DBConnection.getConnection()) {
+            ResultSet rs = conn.getMetaData().getColumns(null, null, "categories", "parent_category_id");
+            hasParentCategoryColumnCache = rs.next();
+            return hasParentCategoryColumnCache;
+        } catch (SQLException e) {
+            System.out.println("Kategori şema kontrol hatası: " + e.getMessage());
+            hasParentCategoryColumnCache = false;
+            return false;
         }
     }
 }

@@ -22,12 +22,12 @@ public class AdminOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-User adminUser = (User) session.getAttribute("currentUser"); 
+        User adminUser = (User) session.getAttribute("adminUser");
 
-if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-    response.sendRedirect(request.getContextPath() + "/login"); 
-    return;
-}
+        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         // Listeleme işlemi
         List<Order> allOrders = orderDAO.getAllOrders();

@@ -25,7 +25,7 @@
         </div>
         <div class="admin-main">
             <h2>${empty category ? 'Yeni Kategori Ekle' : 'Kategoriyi Düzenle'}</h2>
-            <p style="color: #777; margin-bottom: 20px;">Lütfen kategori bilgilerini eksiksiz giriniz.</p>
+            <p style="color: #777; margin-bottom: 20px;">Sadece kategori adını giriniz.</p>
             
             <div class="form-container" style="margin: 0; max-width: 600px; box-shadow: none; border: 1px solid #ddd;">
                 <form action="categories" method="POST">
@@ -35,7 +35,7 @@
                         <label>Kategori Adı</label>
                         <input type="text" name="name" value="${category.name}" required placeholder="Örn: Ev & Yaşam">
                     </div>
-                    
+
                     <div style="display: flex; gap: 10px; margin-top: 20px;">
                         <button type="submit" class="btn" style="width: auto; padding: 10px 25px;">Kaydet</button>
                         <a href="categories" class="btn btn-secondary" style="width: auto; padding: 10px 25px; text-decoration: none; text-align: center;">Vazgeç</a>

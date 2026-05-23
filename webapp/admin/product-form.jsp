@@ -68,6 +68,13 @@
                         <label>Ürün Görsel Linki (URL)</label>
                         <input type="url" name="imageUrl" value="${product.imageUrl}" placeholder="https://example.com/resim.jpg">
                     </div>
+
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                            <input type="checkbox" name="isActive" value="true" ${empty product or product.active ? 'checked' : ''}>
+                            Ürünü sitede yayınla
+                        </label>
+                    </div>
                     
                     <div style="display: flex; gap: 10px; margin-top: 25px;">
                         <button type="submit" class="btn" style="width: auto; padding: 10px 25px;">Ürünü Kaydet</button>

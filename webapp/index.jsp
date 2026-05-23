@@ -11,9 +11,9 @@
         .container { display: flex; margin: 20px; gap: 20px; }
         .sidebar { width: 25%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); height: fit-content; }
         .sidebar h3 { margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #f4f7f6; padding-bottom: 5px; }
-        .sidebar ul { list-style: none; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
         .sidebar ul li { margin-bottom: 10px; }
-        .sidebar ul li a { text-decoration: none; color: #555; font-weight: 600; display: block; padding: 5px; border-radius: 4px; }
+        .sidebar ul li a { text-decoration: none; color: #555; font-weight: 600; display: block; padding: 10px 12px; border-radius: 6px; background: #f8f9fa; }
         .sidebar ul li a:hover, .sidebar ul li a.active { background: #3498db; color: white; }
         
         .main-content { width: 75%; }
@@ -34,7 +34,6 @@
     <div class="navbar">
         <a href="home" class="logo">E-Ticaret Portalı</a>
         <div>
-            <a href="home">Ürünler</a>
             <a href="cart.jsp">Sepetim</a>
             <c:choose>
                 <c:when test="${not empty currentUser}">
@@ -59,7 +58,7 @@
                 </li>
                 <c:forEach var="cat" items="${categories}">
                     <li>
-                        <a href="home?category=${cat.id}" class="${selectedCategory == cat.id ? 'active' : ''}">
+                        <a href="home?category=${cat.id}" class="${selectedCategory != null && selectedCategory == cat.id ? 'active' : ''}">
                             ${cat.name}
                         </a>
                     </li>
@@ -68,7 +67,18 @@
         </div>
 
         <div class="main-content">
-            <h2 style="margin-bottom: 20px; color: #2c3e50;">Ürünlerimiz</h2>
+            <h2 style="margin-bottom: 10px; color: #2c3e50;">
+                <c:choose>
+                    <c:when test="${not empty selectedCategoryName}">${selectedCategoryName} ürünleri</c:when>
+                    <c:otherwise>Tüm Ürünler</c:otherwise>
+                </c:choose>
+            </h2>
+            <p style="margin-bottom: 20px; color: #777;">
+                <c:choose>
+                    <c:when test="${not empty selectedCategoryName}">Seçili kategoriye ait ürünler aşağıda listeleniyor.</c:when>
+                    <c:otherwise>Tüm aktif ürünler listeleniyor.</c:otherwise>
+                </c:choose>
+            </p>
             
             <div class="product-grid">
                 <c:forEach var="p" items="${products}">
@@ -113,7 +123,12 @@
             </div>
             
             <c:if test="${empty products}">
-                <p style="text-align: center; margin-top: 40px; color: #777; font-size: 18px;">Bu kategoride henüz ürün bulunmamaktadır.</p>
+                <p style="text-align: center; margin-top: 40px; color: #777; font-size: 18px;">
+                    <c:choose>
+                        <c:when test="${not empty selectedCategoryName}">Bu kategoride henüz ürün bulunmamaktadır.</c:when>
+                        <c:otherwise>Henüz ürün bulunmamaktadır.</c:otherwise>
+                    </c:choose>
+                </p>
             </c:if>
         </div>
     </div>

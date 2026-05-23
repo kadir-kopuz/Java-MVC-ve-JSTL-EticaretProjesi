@@ -49,9 +49,8 @@ public class OrderServlet extends HttpServlet {
         if (success) {
             session.removeAttribute("cart");
             session.removeAttribute("grandTotal");
-            
-            request.setAttribute("successMessage", "Siparişiniz başarıyla oluşturuldu! Keyifli alışverişler dileriz.");
-            request.getRequestDispatcher("my-orders.jsp").forward(request, response);
+            session.setAttribute("successMessage", "Siparişiniz başarıyla oluşturuldu! Keyifli alışverişler dileriz.");
+            response.sendRedirect(request.getContextPath() + "/my-orders");
         } else {
             request.setAttribute("errorMessage", "Siparişiniz oluşturulurken teknik bir hata meydana geldi.");
             request.getRequestDispatcher("cart.jsp").forward(request, response);

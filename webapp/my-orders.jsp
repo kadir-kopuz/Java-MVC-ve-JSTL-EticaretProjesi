@@ -50,16 +50,8 @@
                     <div class="order-box">
                         <div class="order-header">
                             <div>Sipariş Tarihi: <strong>${order.orderDate}</strong></div>
-                            <div>Toplam Tutar: <strong style="color: #e74c3c;"><fmt:formatNumber value="${order.totalPrice}" type="currency" currencySymbol="₺" /></strong></div>
-                            <div>Durum: <span class="status-badge status-completed">Tamamlandı</span></div>
-                        </div>
-                        <div class="order-body">
-                            <c:forEach var="item" items="${order.items}">
-                                <div class="order-item">
-                                    <span>${item.product.name} <strong>(x${item.quantity})</strong></span>
-                                    <span><fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="₺" /></span>
-                                </div>
-                            </c:forEach>
+                            <div>Toplam Tutar: <strong style="color: #e74c3c;"><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₺" /></strong></div>
+                            <div>Durum: <span class="status-badge status-completed">${order.status}</span></div>
                         </div>
                     </div>
                 </c:forEach>

@@ -22,12 +22,12 @@ public class AdminProductServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-User adminUser = (User) session.getAttribute("currentUser"); // adminUser yerine currentUser yapıldı
+        User adminUser = (User) session.getAttribute("adminUser");
 
-if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-    response.sendRedirect(request.getContextPath() + "/login"); // yönlendirme yolu güvenli hale getirildi
-    return;
-}
+        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         String action = request.getParameter("action");
         String idParam = request.getParameter("id");
@@ -47,17 +47,18 @@ if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        
-        request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("adminUser");
+protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+        throws ServletException, IOException {
+    
+    request.setCharacterEncoding("UTF-8");
+    HttpSession session = request.getSession();
+    User adminUser = (User) session.getAttribute("adminUser");
 
-        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-            response.sendRedirect("../login");
-            return;
-        }
+    if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/login");
+        return;
+    }
+   
 
         String idParam = request.getParameter("id");
         String categoryIdParam = request.getParameter("categoryId");
@@ -114,7 +115,7 @@ if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
         }
 
         if (success) {
-            response.sendRedirect("products");
+            response.sendRedirect(request.getContextPath() + "/admin/products");
         } else {
             sendError(request, response, "Veritabanına kaydedilirken teknik bir hata oluştu.");
         }
@@ -122,6 +123,6 @@ if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
 
     private void sendError(HttpServletRequest request, HttpServletResponse response, String msg) throws ServletException, IOException {
         request.setAttribute("errorMessage", msg);
-        request.getRequestDispatcher("product-form").forward(request, response);
+        request.getRequestDispatcher("/admin/product-form").forward(request, response);
     }
 }

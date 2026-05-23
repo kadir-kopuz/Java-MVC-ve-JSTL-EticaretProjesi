@@ -45,7 +45,7 @@
         <h2 style="margin-bottom: 20px; color: #2c3e50;">Alışveriş Sepetiniz</h2>
         
         <c:choose>
-            <c:when test="${not empty cart and not empty cart.items}">
+            <c:when test="${not empty cart}">
                 <table class="cart-table">
                     <thead>
                         <tr>
@@ -57,12 +57,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="item" items="${cart.items}">
+                        <c:forEach var="item" items="${cart}">
                             <tr>
                                 <td>${item.product.name}</td>
                                 <td><fmt:formatNumber value="${item.product.price}" type="currency" currencySymbol="₺" /></td>
                                 <td>${item.quantity}</td>
-                                <td><fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="₺" /></td>
+                                <td><fmt:formatNumber value="${item.subtotal}" type="currency" currencySymbol="₺" /></td>
                                 <td>
                                     <a href="cart?action=remove&id=${item.product.id}" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px; width: auto;">Sil</a>
                                 </td>
@@ -72,7 +72,7 @@
                 </table>
                 
                 <div class="cart-total">
-                    Genel Toplam: <fmt:formatNumber value="${cart.totalPrice}" type="currency" currencySymbol="₺" />
+                    Genel Toplam: <fmt:formatNumber value="${grandTotal}" type="currency" currencySymbol="₺" />
                 </div>
                 
                 <div class="cart-actions">

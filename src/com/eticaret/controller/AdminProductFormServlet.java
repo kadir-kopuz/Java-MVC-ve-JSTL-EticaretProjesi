@@ -25,7 +25,7 @@ public class AdminProductFormServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("currentUser");
+        User adminUser = (User) session.getAttribute("adminUser");
 
         if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -52,7 +52,7 @@ public class AdminProductFormServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("currentUser");
+        User adminUser = (User) session.getAttribute("adminUser");
 
         if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -76,14 +76,13 @@ public class AdminProductFormServlet extends HttpServlet {
         product.setCategoryId(Integer.parseInt(categoryIdParam));
         product.setImageUrl(imageUrl);
 
-        boolean success;
         if (idParam != null && !idParam.trim().isEmpty()) {
             product.setId(Integer.parseInt(idParam));
-            success = productDAO.updateProduct(product);
+            productDAO.updateProduct(product);
         } else {
-            success = productDAO.addProduct(product);
+            productDAO.addProduct(product);
         }
 
-        response.sendRedirect("products");
+        response.sendRedirect(request.getContextPath() + "/admin/products");
     }
 }

@@ -40,10 +40,10 @@
                     <c:forEach var="order" items="${orders}">
                         <tr style="border-bottom: 1px solid #ddd;">
                             <td style="padding: 12px;">#${order.id}</td>
-                            <td style="padding: 12px;">${order.user.fullName}</td>
+                            <td style="padding: 12px;">${order.customerName}</td>
                             <td style="padding: 12px;">${order.orderDate}</td>
-                            <td style="padding: 12px; font-weight: bold; color: #e74c3c;"><fmt:formatNumber value="${order.totalPrice}" type="currency" currencySymbol="₺" /></td>
-                            <td style="padding: 12px;"><span style="background: #badc58; color: #6ab04c; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">Tamamlandı</span></td>
+                            <td style="padding: 12px; font-weight: bold; color: #e74c3c;"><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₺" /></td>
+                            <td style="padding: 12px;"><span style="background: #badc58; color: #6ab04c; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">${order.status}</span></td>
                         </tr>
                     </c:forEach>
                 </tbody>

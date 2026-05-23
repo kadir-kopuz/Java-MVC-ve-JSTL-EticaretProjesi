@@ -65,6 +65,33 @@ public class ProductDAO {
         return list;
     }
 
+    // Admin için: kategoriye göre tüm ürünleri (aktif/pasif ayrımı yapmadan) getir
+    public List<Product> getProductsByCategoryAll(int categoryId) {
+        List<Product> list = new ArrayList<>();
+        String query = "SELECT * FROM products WHERE category_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, categoryId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setId(rs.getInt("id"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getDouble("price"));
+                    p.setStock(rs.getInt("stock"));
+                    p.setImageUrl(rs.getString("image_url"));
+                    p.setActive(rs.getBoolean("is_active"));
+                    list.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Admin kategoriye göre ürün getirme hatası: " + e.getMessage());
+        }
+        return list;
+    }
+
     public Product getProductById(int id) {
         Product p = null;
         String query = "SELECT * FROM products WHERE id = ?";

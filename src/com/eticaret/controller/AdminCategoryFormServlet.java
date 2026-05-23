@@ -21,11 +21,9 @@ public class AdminCategoryFormServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        // Oturum kontrolünü projenin geneliyle uyumlu hale getirdik (currentUser)
-        User adminUser = (User) session.getAttribute("currentUser");
+        User adminUser = (User) session.getAttribute("adminUser");
 
         if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-            // Yönlendirme yolunu ana dizine göre güvenli hale getirdik
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -48,7 +46,7 @@ public class AdminCategoryFormServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         HttpSession session = request.getSession();
-        User adminUser = (User) session.getAttribute("currentUser");
+        User adminUser = (User) session.getAttribute("adminUser");
 
         if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -62,17 +60,16 @@ public class AdminCategoryFormServlet extends HttpServlet {
         Category category = new Category();
         category.setName(name);
 
-        boolean success;
         if (idParam != null && !idParam.trim().isEmpty()) {
             // ID parametresi varsa bu bir GÜNCELLEME işlemidir
             category.setId(Integer.parseInt(idParam));
-            success = categoryDAO.updateCategory(category);
+            categoryDAO.updateCategory(category);
         } else {
             // ID parametresi yoksa bu YENİ KATEGORİ EKLEME işlemidir
-            success = categoryDAO.addCategory(category);
+            categoryDAO.addCategory(category);
         }
 
         // İşlem tamamlandıktan sonra Kategori Listeleme ekranına yönlendiriyoruz
-        response.sendRedirect("categories");
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 }

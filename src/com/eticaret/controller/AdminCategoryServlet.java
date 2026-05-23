@@ -22,12 +22,12 @@ public class AdminCategoryServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-User adminUser = (User) session.getAttribute("currentUser"); 
+        User adminUser = (User) session.getAttribute("adminUser");
 
-if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
-    response.sendRedirect(request.getContextPath() + "/login"); 
-    return;
-}
+        if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         String action = request.getParameter("action");
         String idParam = request.getParameter("id");
@@ -62,8 +62,6 @@ if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
 
         String idParam = request.getParameter("id");
         String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        String isActiveParam = request.getParameter("isActive");
 
         if (name == null || name.trim().isEmpty()) {
             request.setAttribute("errorMessage", "Kategori adı boş bırakılamaz!");
@@ -73,8 +71,6 @@ if (adminUser == null || !"ADMIN".equals(adminUser.getRole())) {
 
         Category cat = new Category();
         cat.setName(name);
-        cat.setDescription(description);
-        cat.setActive("true".equals(isActiveParam));
 
         boolean success;
         if (idParam != null && !idParam.trim().isEmpty()) {

@@ -22,17 +22,21 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        List<Category> categoryList = categoryDAO.getAllActiveCategories();
-        request.setAttribute("categories", categoryList);
+        List<Category> categories = categoryDAO.getAllActiveCategories();
+        request.setAttribute("categories", categories);
 
         String categoryIdParam = request.getParameter("category");
         List<Product> productList;
+        Integer selectedCategoryId = null;
+        String selectedCategoryName = null;
 
         if (categoryIdParam != null && !categoryIdParam.trim().isEmpty()) {
             try {
                 int categoryId = Integer.parseInt(categoryIdParam);
                 productList = productDAO.getProductsByCategory(categoryId);
-                request.setAttribute("selectedCategory", categoryId);
+                selectedCategoryId = categoryId;
+
+                selectedCategoryName = findCategoryName(categories, categoryId);
             } catch (NumberFormatException e) {
                 productList = productDAO.getAllActiveProducts();
             }
@@ -40,6 +44,8 @@ public class HomeServlet extends HttpServlet {
             productList = productDAO.getAllActiveProducts();
         }
 
+        request.setAttribute("selectedCategory", selectedCategoryId);
+        request.setAttribute("selectedCategoryName", selectedCategoryName);
         request.setAttribute("products", productList);
 
         request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -49,5 +55,24 @@ public class HomeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         doGet(request, response);
+    }
+
+    private String findCategoryName(List<Category> categories, int categoryId) {
+        if (categories == null) {
+            return null;
+        }
+
+        for (Category category : categories) {
+            if (category.getId() == categoryId) {
+                return category.getName();
+            }
+
+            String childName = findCategoryName(category.getChildren(), categoryId);
+            if (childName != null) {
+                return childName;
+            }
+        }
+
+        return null;
     }
 }
