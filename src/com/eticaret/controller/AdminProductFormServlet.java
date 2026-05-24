@@ -59,7 +59,6 @@ public class AdminProductFormServlet extends HttpServlet {
             return;
         }
 
-        // Formdan gelen verileri tek tek yakalıyoruz
         String idParam = request.getParameter("id");
         String name = request.getParameter("name");
         String description = request.getParameter("description");

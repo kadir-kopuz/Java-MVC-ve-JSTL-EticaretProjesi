@@ -29,10 +29,12 @@
             <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr style="background: #2c3e50; color: white;">
-                        <th style="padding: 12px; text-align: left;">ID</th>
+                        <th style="padding: 12px; text-align: left;">Kullanıcı ID</th>
                         <th style="padding: 12px; text-align: left;">Ad Soyad</th>
                         <th style="padding: 12px; text-align: left;">E-posta</th>
-                        <th style="padding: 12px; text-align: left;">Yetki Rolü</th>
+                        <th style="padding: 12px; text-align: left;">Telefon</th>
+                        <th style="padding: 12px; text-align: left;">Rol</th>
+                        <th style="padding: 12px; text-align: left;">Kayıt Tarihi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,10 +43,14 @@
                             <td style="padding: 12px;">${u.id}</td>
                             <td style="padding: 12px;">${u.fullName}</td>
                             <td style="padding: 12px;">${u.email}</td>
+                            <td style="padding: 12px;">${u.phone}</td>
                             <td style="padding: 12px;">
                                 <span style="padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; ${u.role == 'ADMIN' ? 'background: #ffeaa7; color: #d63031;' : 'background: #dff9fb; color: #130cb7;'}">
                                     ${u.role}
                                 </span>
+                            </td>
+                            <td style="padding: 12px;">
+                                <fmt:formatDate value="${u.createdAt}" pattern="dd.MM.yyyy HH:mm" />
                             </td>
                         </tr>
                     </c:forEach>

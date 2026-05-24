@@ -31,10 +31,11 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
 
-        // Sunucu tarafı kontrol zorunludur
         if (fullName == null || fullName.trim().isEmpty() || 
             email == null || email.trim().isEmpty() || 
-            password == null || password.trim().isEmpty()) {
+            password == null || password.trim().isEmpty() ||
+            phone == null || phone.trim().isEmpty() ||
+            address == null || address.trim().isEmpty()) {
             
             request.setAttribute("errorMessage", "Lütfen tüm zorunlu alanları doldurun.");
             request.getRequestDispatcher("register.jsp").forward(request, response);

@@ -25,6 +25,9 @@
         <c:if test="${not empty error}">
             <div class="error-msg">${error}</div>
         </c:if>
+        <c:if test="${not empty errorMessage}">
+            <div class="error-msg">${errorMessage}</div>
+        </c:if>
         
         <form action="register" method="POST">
             <div class="form-group">
@@ -34,6 +37,14 @@
             <div class="form-group">
                 <label>E-posta Adresi</label>
                 <input type="email" name="email" required placeholder="ahmet@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Telefon</label>
+                <input type="tel" name="phone" required placeholder="05XX XXX XX XX">
+            </div>
+            <div class="form-group">
+                <label>Adres</label>
+                <textarea name="address" required placeholder="Açık adresinizi giriniz" style="width: 100%; min-height: 90px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical;"></textarea>
             </div>
             <div class="form-group">
                 <label>Şifre</label>

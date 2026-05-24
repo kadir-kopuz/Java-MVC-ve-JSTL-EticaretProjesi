@@ -29,7 +29,6 @@ public class AdminOrderServlet extends HttpServlet {
             return;
         }
 
-        // Listeleme işlemi
         List<Order> allOrders = orderDAO.getAllOrders();
         request.setAttribute("orders", allOrders);
         request.getRequestDispatcher("orders.jsp").forward(request, response);

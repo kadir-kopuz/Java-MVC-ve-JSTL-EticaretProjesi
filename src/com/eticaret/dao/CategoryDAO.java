@@ -116,12 +116,10 @@ public class CategoryDAO {
     }
 
     public List<Category> getActiveCategoryTree() {
-        // Üst kategori kaldırıldı; düz liste döndür
         return getAllActiveCategories();
     }
 
     public List<Category> getCategoryTree() {
-        // Üst kategori kaldırıldı; düz liste döndür
         return getAllCategories();
     }
 

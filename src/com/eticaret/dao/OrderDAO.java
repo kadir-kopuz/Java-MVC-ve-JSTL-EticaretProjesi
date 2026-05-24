@@ -49,7 +49,6 @@ public class OrderDAO {
                 psItem.setDouble(5, item.getSubtotal());
                 psItem.addBatch();
 
-                // Stok azaltma sorgusu
                 psStock.setInt(1, item.getQuantity());
                 psStock.setInt(2, item.getProduct().getId());
                 psStock.addBatch();
@@ -125,7 +124,7 @@ public class OrderDAO {
                 o.setOrderDate(rs.getTimestamp("order_date"));
                 o.setTotalAmount(rs.getDouble("total_amount"));
                 o.setStatus(rs.getString("status"));
-                o.setCustomerName(rs.getString("full_name")); // JOIN'den gelen veri
+                o.setCustomerName(rs.getString("full_name"));
                 list.add(o);
             }
         } catch (SQLException e) {

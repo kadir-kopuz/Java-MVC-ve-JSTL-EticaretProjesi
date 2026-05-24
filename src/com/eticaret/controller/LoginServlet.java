@@ -27,7 +27,6 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // Sunucu tarafı zorunlu form doğrulaması
         if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             request.setAttribute("errorMessage", "E-posta ve şifre alanları boş bırakılamaz.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -40,10 +39,10 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             
             if ("ADMIN".equals(user.getRole())) {
-                session.setAttribute("adminUser", user); // Admin session'ı
+                session.setAttribute("adminUser", user);
                 response.sendRedirect("admin/dashboard"); 
             } else {
-                session.setAttribute("currentUser", user); // Kullanıcı session'ı
+                session.setAttribute("currentUser", user);
                 response.sendRedirect("home"); 
             }
         } else {

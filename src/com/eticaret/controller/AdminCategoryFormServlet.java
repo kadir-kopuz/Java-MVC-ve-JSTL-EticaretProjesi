@@ -42,7 +42,6 @@ public class AdminCategoryFormServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        // Türkçe kategorilerin veritabanına bozulmadan gitmesi için şarttır
         request.setCharacterEncoding("UTF-8");
         
         HttpSession session = request.getSession();
@@ -53,7 +52,6 @@ public class AdminCategoryFormServlet extends HttpServlet {
             return;
         }
 
-        // Formdan gelen Kategori verilerini yakalıyoruz
         String idParam = request.getParameter("id");
         String name = request.getParameter("name");
 
@@ -61,15 +59,12 @@ public class AdminCategoryFormServlet extends HttpServlet {
         category.setName(name);
 
         if (idParam != null && !idParam.trim().isEmpty()) {
-            // ID parametresi varsa bu bir GÜNCELLEME işlemidir
             category.setId(Integer.parseInt(idParam));
             categoryDAO.updateCategory(category);
         } else {
-            // ID parametresi yoksa bu YENİ KATEGORİ EKLEME işlemidir
             categoryDAO.addCategory(category);
         }
 
-        // İşlem tamamlandıktan sonra Kategori Listeleme ekranına yönlendiriyoruz
         response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 }

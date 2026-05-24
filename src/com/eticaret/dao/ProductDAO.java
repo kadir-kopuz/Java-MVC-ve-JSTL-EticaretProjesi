@@ -65,7 +65,6 @@ public class ProductDAO {
         return list;
     }
 
-    // Admin için: kategoriye göre tüm ürünleri (aktif/pasif ayrımı yapmadan) getir
     public List<Product> getProductsByCategoryAll(int categoryId) {
         List<Product> list = new ArrayList<>();
         String query = "SELECT * FROM products WHERE category_id = ?";
@@ -105,7 +104,6 @@ public class ProductDAO {
                     p = new Product();
                     p.setId(rs.getInt("id"));
                     p.setCategoryId(rs.getInt("category_id"));
-                    p.setName(rs.getInt("id") + " " + rs.getString("name")); // veya direkt ismini ata
                     p.setName(rs.getString("name"));
                     p.setDescription(rs.getString("description"));
                     p.setPrice(rs.getDouble("price"));
@@ -119,7 +117,6 @@ public class ProductDAO {
         }
         return p;
     }
-    // Admin için aktif-pasif ayrımı yapmaksızın TÜM ürünleri listeleme (İster 6.4)
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
         String query = "SELECT p.*, c.name as category_name FROM products p " +
@@ -147,7 +144,6 @@ public class ProductDAO {
         return list;
     }
 
-    // Yeni Ürün Ekleme
     public boolean addProduct(Product product) {
         String query = "INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -168,7 +164,6 @@ public class ProductDAO {
         }
     }
 
-    // Ürün Güncelleme
     public boolean updateProduct(Product product) {
         String query = "UPDATE products SET category_id = ?, name = ?, description = ?, price = ?, stock = ?, image_url = ?, is_active = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -190,7 +185,6 @@ public class ProductDAO {
         }
     }
 
-    // Ürün Silme
     public boolean deleteProduct(int id) {
         String query = "DELETE FROM products WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();

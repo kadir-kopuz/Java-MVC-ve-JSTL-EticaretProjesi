@@ -91,17 +91,13 @@ body {
   margin-bottom: 15px;
   text-align: center;
 }
-/* --- ADMIN PANELI YAN YANA VE RENKLI GÖRÜNÜMÜ --- */
-
-/* Sidebar konteynerini dikeyden yataya (yan yana) çeviriyoruz */
 .admin-container {
   display: flex;
-  flex-direction: column; /* Sayfa yerleşimini yukarıdan aşağıya sıralar */
+  flex-direction: column;
   margin: 20px;
   gap: 20px;
 }
 
-/* Menü çubuğunu üst tarafa geniş bir bant halinde yan yana diziyoruz */
 .admin-sidebar {
   width: 100% !important;
   min-height: auto !important;
@@ -110,12 +106,11 @@ body {
   border-radius: 8px;
   box-sizing: border-box;
   display: flex;
-  flex-wrap: wrap; /* Ekran küçülürse butonlar alt satıra şıkça kayar */
+  flex-wrap: wrap;
   gap: 12px;
   align-items: center;
 }
 
-/* Menü Linklerinin Ortak Şık Tasarımı (Alt çizgiler tamamen kalktı) */
 .admin-sidebar a {
   text-decoration: none !important;
   display: inline-block;
@@ -129,9 +124,6 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Her Butona Sayfa Konseptine Uygun Ayrı ve Canlı Renkler */
-
-/* 1. Panel Ana Sayfa (Mavi) */
 .admin-sidebar a[href="dashboard"] {
   background-color: #3498db;
 }
@@ -140,7 +132,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* 2. Kategori Yönetimi (Yeşil) */
 .admin-sidebar a[href="categories"],
 .admin-sidebar a[href="category-form"] {
   background-color: #2ecc71;
@@ -151,7 +142,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* 3. Ürün Yönetimi (Mor/Eflatun) */
 .admin-sidebar a[href="products"],
 .admin-sidebar a[href="product-form"] {
   background-color: #9b59b6;
@@ -162,17 +152,15 @@ body {
   transform: translateY(-2px);
 }
 
-/* 4. Sipariş Yönetimi (Turuncu/Altın) */
 .admin-sidebar a[href="orders"] {
   background-color: #f1c40f;
-  color: #2c3e50 !important; /* Koyu renk yazı daha okunaklı olur */
+  color: #2c3e50 !important;
 }
 .admin-sidebar a[href="orders"]:hover {
   background-color: #f39c12;
   transform: translateY(-2px);
 }
 
-/* 5. Kullanıcı Listesi (Turkuaz) */
 .admin-sidebar a[href="users"] {
   background-color: #1abc9c;
 }
@@ -181,13 +169,11 @@ body {
   transform: translateY(-2px);
 }
 
-/* Aktif olan butonun üzerinde hafif bir parlama efekti */
 .admin-sidebar a.active {
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* İçerik alanının genişliğini yan yana yerleşimden sonra tam genişlik yapıyoruz */
 .admin-main {
   width: 100% !important;
   box-sizing: border-box;
